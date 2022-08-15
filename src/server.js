@@ -1,9 +1,10 @@
 const express = require("express");
 const app = express();
 
-app.use("/", function (req, res) {
-    res.sendFile(__dirname + "/index.html");
-});
+app.set("view engine", "pug");
+app.set("views", __dirname + "/views");
+app.use("/public", express.static(__dirname + "/public"));
+app.get("/", (req, res) => res.render("home"));
 
 app.listen(8080, function () {
     console.log("8080 연결되었습니다.");
