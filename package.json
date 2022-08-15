@@ -1,0 +1,23 @@
+{
+  "name": "apple_nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hozunlee/apple_nodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hozunlee/apple_nodejs/issues"
+  },
+  "homepage": "https://github.com/hozunlee/apple_nodejs#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "ws": "^8.8.1"
+  }
+}
