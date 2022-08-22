@@ -10,7 +10,7 @@ app.get("/", (req, res) => res.render("home"));
 app.get("/*", (_, res) => res.redirect("/"));
 
 app.listen(8080, function () {
-    console.log("8080 연결되었습니다.");
+    console.log("8080 연결되었습니다. express and node.js");
 });
 
 const server = http.createServer(app);
