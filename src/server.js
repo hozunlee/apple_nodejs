@@ -17,7 +17,7 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 // why? 우리의 서버를 보이게 노출시키고, http서버 위에 ws 서버를 만들기 위해서
 
-server.listen(3000, () => console.log("Listening on "));
+server.listen(3000, () => console.log("Listening on my heart beat"));
 
 // return;
 // // 코딩애플
