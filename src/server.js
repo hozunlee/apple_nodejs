@@ -1,4 +1,5 @@
 import http from "http";
+import { parse } from "path";
 const WebSocket = require("ws");
 const express = require("express");
 const app = express();
@@ -26,10 +27,15 @@ wss.on("connection", (socket) => {
     sockets.push(socket);
     console.log("Connected to Browser 🧇");
     socket.on("close", () => console.log("Disconnected from client 🍘"));
-    socket.on("message", (message) => {
-        sockets.forEach((aSocket) => aSocket.send(message.toString()));
-        // socket.send(message.toString());
-    }); // user가 보낸 message를 다시 user에게
+    socket.on("message", (msg) => {
+        const message = JSON.parse(msg);
+        // console.log(message, msg.toString())
+        if (message.type === "new_message") {
+            sockets.forEach((aSocket) => aSocket.send(message.payload));
+        } else if (message.type === "nickname") {
+            console.log(message.payload);
+        }
+    });
 }); // 가독성을 위해 콜백에 익명함수를 받음
 
 server.listen(3000, () => console.log("Listening on my heart beat"));
