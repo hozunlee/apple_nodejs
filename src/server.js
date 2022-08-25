@@ -25,15 +25,22 @@ const sockets = [];
 
 wss.on("connection", (socket) => {
     sockets.push(socket);
+    socket["nickname"] = "익명씨";
     console.log("Connected to Browser 🧇");
     socket.on("close", () => console.log("Disconnected from client 🍘"));
     socket.on("message", (msg) => {
         const message = JSON.parse(msg);
         // console.log(message, msg.toString())
-        if (message.type === "new_message") {
-            sockets.forEach((aSocket) => aSocket.send(message.payload));
-        } else if (message.type === "nickname") {
-            console.log(message.payload);
+
+        switch (message.type) {
+            case "new_message":
+                sockets.forEach((aSocket) =>
+                    aSocket.send(`${socket.nickname}: ${message.payload}`)
+                );
+                break;
+            case "nickname":
+                socket["nickname"] = message.payload;
+                break;
         }
     });
 }); // 가독성을 위해 콜백에 익명함수를 받음
