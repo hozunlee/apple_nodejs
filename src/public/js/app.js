@@ -1,42 +1,20 @@
-const messageList = document.querySelector("ul");
-const messageForm = document.querySelector("#message");
-const nickForm = document.querySelector("#nick");
+const socket = io();
 
-const socket = new WebSocket(`ws://${window.location.host}`);
+const welcome = document.querySelector("#welcome");
+const form = welcome.querySelector("form");
+const form2 = document.querySelector("#msg");
 
-const makeMessage = (type, payload) => {
-    const msg = { type, payload };
-    return JSON.stringify(msg);
-};
+function backendDone(msg) {
+    console.log(`the backend says:`, msg);
+}
 
-socket.addEventListener("open", () => {
-    console.log("Connected to server 🧇");
-});
-
-socket.addEventListener("message", (message) => {
-    // console.log("New message ", message.data);
-    const li = document.createElement("li");
-    li.innerText = message.data;
-    messageList.append(li);
-});
-
-socket.addEventListener("close", () => {
-    console.log("Disconnected from server 🍘");
-});
-
-const handleSubmit = (event) => {
+const handleRoomSubmit = (event) => {
     event.preventDefault();
-    const input = messageForm.querySelector("input");
-    socket.send(makeMessage("new_message", input.value));
+    const input = form.querySelector("input");
+    socket.emit("enter_room", input.value, backendDone);
     input.value = "";
 };
 
-const handleNickSubmit = (event) => {
-    event.preventDefault();
-    const input = nickForm.querySelector("input");
-    socket.send(makeMessage("nickname", input.value));
-    input.value = "";
-};
+form.addEventListener("submit", handleRoomSubmit);
 
-messageForm.addEventListener("submit", handleSubmit);
-nickForm.addEventListener("submit", handleNickSubmit);
+// TODO  첫번째 이제 emit을 할 수 있다. send 말고 emit

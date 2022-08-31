@@ -1,6 +1,7 @@
 import http from "http";
+import socketIO from "socket.io";
 import { parse } from "path";
-const WebSocket = require("ws");
+// const WebSocket = require("ws");
 const express = require("express");
 const app = express();
 
@@ -14,14 +15,29 @@ app.listen(8080, function () {
     console.log("8080 연결되었습니다. express and node.js");
 });
 
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
-// why? 우리의 서버를 보이게 노출시키고, http서버 위에 ws 서버를 만들기 위해서
+const httpServer = http.createServer(app);
+const ioServer = socketIO(httpServer);
+
+ioServer.on("connection", (socket) => {
+    socket.onAny((event) => {
+        console.log("event :>> ", event);
+    });
+
+    socket.on("enter_room", (roomName, done) => {
+        console.log(socket.rooms);
+        socket.join(roomName);
+        console.log(socket.rooms);
+        setTimeout(() => {
+            done(`${roomName.payload}에 입장하셨습니다.`);
+        }, 500);
+    });
+});
 
 /**
+const wss = new WebSocket.Server({ server });
  * fake Database : 누군가 서버를 연결하면 그 connection을 push
  */
-const sockets = [];
+/* const sockets = [];
 
 wss.on("connection", (socket) => {
     sockets.push(socket);
@@ -44,8 +60,9 @@ wss.on("connection", (socket) => {
         }
     });
 }); // 가독성을 위해 콜백에 익명함수를 받음
+*/
 
-server.listen(3000, () => console.log("Listening on my heart beat"));
+httpServer.listen(3000, () => console.log("Listening on my heart beat"));
 
 // return;
 // // 코딩애플
