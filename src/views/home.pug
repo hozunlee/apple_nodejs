@@ -8,19 +8,33 @@ html(lang="en")
         link(rel="stylesheet", href="https://unpkg.com/mvp.css")
     body 
     header
-        h1 hello
+        h1 POCAZ Chat
     main
         div#welcome
-            form
+            form#name
+                input(placeholder="nickname", required, type="text")
+                button save
+            form#pushMaster
+                h3 공지사항
+                button 
+                    a(href="/public/js/chat.html")  Enter Room
+            form#roomNumber
+                h3 1:1채팅방
                 input(placeholder="room name", required, type="text")
                 button Enter Room
-        //- div
-        //-     form#msg 
-        //-         input(placeholder="대화하세요", required, type="text")
-        //-         button Enter msg
 
-            
-
+        div#room
+            h3
+            h4 레드벨벳 슬기 포카 팝니다
+            span 판매중 / 예약중 /
+            span#deal 거래완료(클릭 시 가격입력팝업)
+            ul
+            form#msg
+                input(placeholder="message", required, type="text")
+                button 사진보내기
+                button send
+    footer
+        div 푸터입니다. 버튼이 5개
     
     script(src="/socket.io/socket.io.js") 
     script(src="/public/js/app.js") 

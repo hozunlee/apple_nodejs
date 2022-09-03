@@ -19,18 +19,28 @@ const httpServer = http.createServer(app);
 const ioServer = socketIO(httpServer);
 
 ioServer.on("connection", (socket) => {
+    socket["nickname"] = "김익명씨";
     socket.onAny((event) => {
         console.log("event :>> ", event);
     });
 
     socket.on("enter_room", (roomName, done) => {
-        console.log(socket.rooms);
         socket.join(roomName);
-        console.log(socket.rooms);
-        setTimeout(() => {
-            done(`${roomName.payload}에 입장하셨습니다.`);
-        }, 500);
+        socket.to(roomName).emit("welcome", socket.nickname);
+        done();
     });
+    socket.on("disconnecting", () => {
+        socket.rooms.forEach((room) =>
+            socket.to(room).emit("bye", socket.nickname)
+        );
+    });
+
+    socket.on("new_message", (msg, room, done) => {
+        socket.to(room).emit("new_message", `${socket.nickname}: ${msg}`);
+        done();
+    });
+
+    socket.on("nickname", (nickname) => (socket["nickname"] = nickname));
 });
 
 /**
